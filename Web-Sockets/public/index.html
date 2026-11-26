@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h1 class="head">Tic Tac Toe</h1>
+    <!-- Challange Screen -->
+    <!-- Gaming Screen -->
+    <section>
+        <div class="grid-container">
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+            <button class="box"></button>
+        </div>
+    </section>
+
+
+    <script>
+        const socket = io();
+        const winning = [
+            // row
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            // diagonal
+            [0, 4, 8],
+            [2, 4, 6],
+            // column
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8]
+        ]
+        let turn = false // false -> "O", true -> X
+        const boxes = document.querySelectorAll(".box")
+        let count = 0;
+        let mySymbol = false
+        let roomName = "";
+        socket.on("my-symbol", (data) => {
+            const { myTurn } = data;
+            mySymbol = myTurn;
+        })
+
+        const isWin = () => {
+            winning.forEach(winArray => { // winning conditions
+                //0
+                let value1 = boxes[winArray[0]].textContent; // X
+                // 1
+                let value2 = boxes[winArray[1]].textContent; // X
+                // 2
+                let value3 = boxes[winArray[2]].textContent; // X
+                if (value1 !== "" && value2 !== "" && value3 !== "" && value1 === value2 && value2 === value3) {
+                    alert(`Jeet Gaye:${value1}`);
+                    reset();
+                }
+            })
+        }
+
+        const reset = () => {
+            boxes.forEach(box => {
+                box.disabled = false;
+                box.textContent = "";
+            })
+            alert("game reset")
+            count = 0;
+        }
+
+        boxes.forEach((box, index) => {
+            box.addEventListener("click", () => {
+                if (turn !== mySymbol) return;
+                box.textContent = turn ? "X" : "O";
+                socket.emit("move", {
+                    roomName,
+                    index
+                })
+                box.disabled = true;
+                turn = !turn // change
+                count++;
+                if (count >= 5) isWin();
+                if (count === 9) reset();
+            })
+        })
+
+        socket.on("room-name", (data) => {
+           const { roomN } = data
+           roomName = roomN
+           console.log(roomName)
+        })
+
+        socket.on("move", (data) => {
+            const { index } = data
+            box = boxes[index];
+            box.textContent = !mySymbol ? "X" : "O"
+            box.disabled = true;
+            count++;
+            turn = !turn
+            if (count >= 5) isWin();
+            if (count === 9) reset();
+        });
+    </script>
+</body>
+
+</html>

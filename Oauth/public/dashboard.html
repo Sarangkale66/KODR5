@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - User Profile</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
+        ✓ Authenticated
+      </div>
+      <h1>User Dashboard</h1>
+      <p class="subtitle">Session authenticated via Passport &amp; JWT</p>
+    </div>
+
+    <div class="profile-card">
+      <img id="avatar" class="avatar" src="https://via.placeholder.com/150" alt="Avatar">
+      <h2 id="user-name" class="user-name">Loading...</h2>
+      <p id="user-email" class="user-email"></p>
+
+      <div id="provider-badge" class="provider-tag">
+        Provider: <span id="provider-name" style="font-weight: 700; margin-left: 4px;">...</span>
+      </div>
+
+      <div style="text-align: left; margin-top: 10px;">
+        <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 600;">JWT DECODED PAYLOAD:</span>
+        <pre id="json-preview" class="json-box">Loading...</pre>
+      </div>
+
+      <a href="/auth/logout" class="btn btn-logout">Sign Out</a>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
