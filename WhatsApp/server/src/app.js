@@ -4,6 +4,7 @@ import morgan from "morgan"
 import securityMiddleware from "./middleware/security.middleware.js";
 import notFound from "./middleware/notFound.middleware.js";
 import errorHandlerMiddleware from "./middleware/errorHandler.middleware.js";
+import authRouter from "./modules/public/auth/auth.route.js"
 
 export default function createApp() {
     const app = express();
@@ -11,11 +12,10 @@ export default function createApp() {
     if(env.NODE_ENV === 'development') 
         app.use(morgan("dev"));
 
-    app.get("/health", (req, res)=> {
-        throw new Error("meko pasad nahi aaya")
-    })
-
     securityMiddleware(app);
+
+    app.use("/api/auth", authRouter);
+
     app.use(notFound);
     app.use(errorHandlerMiddleware);
 
