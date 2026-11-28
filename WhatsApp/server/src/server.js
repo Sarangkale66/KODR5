@@ -10,7 +10,7 @@ const app = createApp();
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: env.CORS_ORIGIN.split(",").map((origin)=>origin.trim()),
+    origin: env.CORS_ORIGIN.split(",").map((origin)=> origin.trim()), // string[]
     methods: ["GET", "POST"],
     credentials: true
   }
